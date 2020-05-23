@@ -428,11 +428,11 @@ void AbstractEglTexture::updateTexture(WindowPixmap *pixmap)
         return;
     }
     Q_ASSERT(image.size() == m_size);
-    const QRegion damage = s->trackedDamage();
+    const QRegion damage = s->mapToBuffer(s->trackedDamage());
     s->resetTrackedDamage();
 
     // TODO: this should be shared with GLTexture::update
-    createTextureSubImage(s->scale(), image, damage);
+    createTextureSubImage(image, damage);
 }
 
 bool AbstractEglTexture::createTextureImage(const QImage &image)
@@ -480,7 +480,7 @@ bool AbstractEglTexture::createTextureImage(const QImage &image)
     return true;
 }
 
-void AbstractEglTexture::createTextureSubImage(int scale, const QImage &image, const QRegion &damage)
+void AbstractEglTexture::createTextureSubImage(const QImage &image, const QRegion &damage, int scale)
 {
     q->bind();
     if (GLPlatform::instance()->isGLES()) {
@@ -623,7 +623,7 @@ bool AbstractEglTexture::updateFromInternalImageObject(WindowPixmap *pixmap)
         return loadInternalImageObject(pixmap);
     }
 
-    createTextureSubImage(image.devicePixelRatio(), image, pixmap->toplevel()->damage());
+    createTextureSubImage(image, pixmap->toplevel()->damage(), image.devicePixelRatio());
 
     return true;
 }

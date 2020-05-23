@@ -1293,6 +1293,8 @@ QPointF WindowPixmap::mapToWindow(const QPointF &point) const
 
 QPointF WindowPixmap::mapToBuffer(const QPointF &point) const
 {
+    if (surface())
+        return surface()->mapToBuffer(point);
     return point * scale();
 }
 
