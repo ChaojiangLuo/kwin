@@ -422,6 +422,7 @@ void Scene::addToplevel(Toplevel *c)
         connect(monitor, &SubSurfaceMonitor::subSurfaceUnmapped, this, discardQuads);
 
         connect(c->surface(), &KWaylandServer::SurfaceInterface::scaleChanged, this, discardQuads);
+        connect(c->surface(), &KWaylandServer::SurfaceInterface::viewportChanged, this, discardQuads);
     }
 
     connect(c, &Toplevel::screenScaleChanged, this, discardQuads);
